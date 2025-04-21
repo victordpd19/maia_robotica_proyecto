@@ -1,5 +1,41 @@
 # Entrega 1: Estrategia Heurística
 
+## Estrategia heurística empleada
+
+La lógica de control se basa en un **autómata de estados** que reacciona únicamente a las lecturas de los sensores de proximidad, sin planificación global. Los pilares de la heurística son:
+
+1. **Lectura de sensores**
+
+   - El robot dispone de 8 sensores (`SL1–SL4` a la izquierda y `SR1–SR4` a la derecha).
+   - Cada sensor devuelve una distancia (0–20 cm) o –1 si no detecta obstáculos.
+
+2. **Avance libre (FREE_FORWARD)**
+
+   - Si **todos** los sensores están en –1, el robot avanza a velocidad constante (vl=vr=0.8).
+   - Objetivo: cubrir terreno abierto y detectar muros desde lejos.
+
+3. **Detección frontal y giro de 90° (ROTATE_OBSTACLE_90_POSITIVE)**
+
+   - Si los sensores frontales (`SL1` y `SR1`) detectan un obstáculo cercano (< WALL_DETECTION_DISTANCE), el robot se detiene y gira 90° a la derecha.
+   - Se calcula un `target_angle` alineado al múltiplo más cercano de π/2, y se gira hasta alcanzarlo (±ANGLE_EPSILON).
+
+4. **Seguimiento de pared (WALL_FOLLOWING)**
+
+   - Tras el giro, si el sensor derecho medio (`SR3`) detecta una pared, entramos en wall‑following.
+   - Se compara la lectura con la distancia objetivo (`WALL_FOLLOW_DISTANCE ± WALL_THRESHOLD`) y se aplican **correcciones** ajustando ligeramente las velocidades de cada rueda (por ejemplo, aumentar vr o vl) para mantenernos a la distancia deseada.
+
+5. **Detección de “final de pasillo” y giro inverso (ROTATE_OBSTACLE_90_NEGATIVE)**
+
+   - Cuando los sensores derechos (`SR1–SR3`) dejan de detectar pared, se acumula un contador (`off_wall_offset`).
+   - Al superar un umbral (`STEPS_FILTER`), se asume que acabó el pasillo y se gira 90° a la izquierda para buscar nuevas paredes.
+
+6. **Estado “after_turn”**
+
+   - Tras cada giro mayor, se activa un breve modo “after_turn” en el que el robot avanza lento (vl=vr≈0.6) antes de retomar el seguimiento normal, evitando giros consecutivos prematuros.
+
+7. **U‑turn en esquinas cerradas**
+   - Si se detecta que no hay paredes a ningún lado (`SR1–SR3` y sus lecturas previas son –1), se valida un U‑turn y se aplica un giro de 180° dividido en dos de 90°.
+
 ## Resultados y conclusiones
 
 - **Desempeño global:**  
