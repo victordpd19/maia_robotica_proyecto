@@ -2,7 +2,7 @@
 
 ## Estrategia heurística empleada
 
-La lógica de control se basa en un **autómata de estados** que reacciona únicamente a las lecturas de los sensores de proximidad, sin planificación global. Los pilares de la heurística son:
+La lógica de control se basa en un **autómata de estados** que reacciona únicamente a las lecturas de los sensores de proximidad, sin planificación global. De forma resumida, los pilares de la heurística son:
 
 1. **Lectura de sensores**
 
@@ -16,7 +16,7 @@ La lógica de control se basa en un **autómata de estados** que reacciona únic
 
 3. **Detección frontal y giro de 90° (ROTATE_OBSTACLE_90_POSITIVE)**
 
-   - Si los sensores frontales (`SL1` y `SR1`) detectan un obstáculo cercano (< WALL_DETECTION_DISTANCE), el robot se detiene y gira 90° a la derecha.
+   - Si los sensores frontales (`SL1` y `SR1`) detectan un obstáculo cercano (< WALL_DETECTION_DISTANCE), el robot se detiene y gira 90° en sentido contrarreloj.
    - Se calcula un `target_angle` alineado al múltiplo más cercano de π/2, y se gira hasta alcanzarlo (±ANGLE_EPSILON).
 
 4. **Seguimiento de pared (WALL_FOLLOWING)**
@@ -44,7 +44,7 @@ La lógica de control se basa en un **autómata de estados** que reacciona únic
   - Navegación estable en espacios abiertos y pasillos.
   - Detección fiable de obstáculos frontales y laterales.
 - **Debilidades detectadas:**
-  - Tendencia a atascarse en esquinas interiores sin suficiente giro (“corner turns”).
+  - Tendencia a atascarse en esquinas exteriores sin suficiente giro (“corner turns”).
   - Oscilaciones frecuentes al seguir muros largos, debido a correcciones abruptas.
 
 ## Respuestas a las preguntas finales

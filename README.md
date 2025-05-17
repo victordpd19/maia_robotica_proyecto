@@ -57,4 +57,4 @@ vl, vr = controller.update(my_robot)  # Obtener velocidades de las ruedas
 
 ## Licencia
 
-Este proyecto es parte del curso de Robótica y está basado en el simulador de Paul O'Dowd y Hemma Philamore.
+Este proyecto es parte del curso de MAIA:Robótica y Aprendizaje; está basado en el simulador de Paul O'Dowd y Hemma Philamore.
